@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration xmlns:xi="http://www.w3.org/2001/XInclude">
+    <property>
+        <name>xasecure.audit.destination.db</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.db.jdbc.driver</name>
+        <value>com.mysql.jdbc.Driver</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.db.jdbc.url</name>
+        <value>jdbc:mysql://localhost/ranger_audit</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.db.password</name>
+        <value>rangerlogger</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.db.user</name>
+        <value>rangerlogger</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.db.batch.filespool.dir</name>
+        <value>/tmp/audit/db/spool</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.hdfs</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.hdfs.dir</name>
+        <value>hdfs://localhost:8020/ranger/audit</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.hdfs.batch.filespool.dir</name>
+        <value>/tmp/audit/hdfs/spool</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.log4j</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.log4j.logger</name>
+        <value>ranger_audit_logger</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.solr</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.solr.batch.filespool.dir</name>
+        <value>/tmp/audit/solr/spool</value>
+    </property>
+
+    <property>
+        <name>xasecure.audit.destination.solr.urls</name>
+        <value>http://192.168.122.101:8983/solr/ranger_audits</value>
+    </property>
+</configuration>

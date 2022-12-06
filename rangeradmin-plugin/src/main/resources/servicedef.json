@@ -1,0 +1,46 @@
+{
+  "name": "testrestapi",
+  "label": "Protection API test service",
+  "description": "Test Ranger plugin",
+  "guid": "fbcc9097-a6b1-4588-8df4-89da5c407e51",
+  "implClass": "io.arenadata.rangerplugin.controllers.RestApiTestServiceImpl",
+  "version": 1,
+  "isEnabled": 1,
+  "resources": [
+    {
+      "itemId": 1,
+      "name": "restendpoint",
+      "label": "REST API endpoint to protect",
+      "type": "path",
+      "level": 10,
+      "mandatory": true,
+      "lookupSupported": true,
+      "recursiveSupported": true,
+      "excludesSupported": true,
+      "matcher": "org.apache.ranger.plugin.resourcematcher.RangerPathResourceMatcher",
+      "matcherOptions": {
+        "wildCard": true,
+        "ignoreCase": true
+      }
+    }
+  ],
+
+  "accessTypes": [
+    {
+      "itemId": 1,
+      "name": "get",
+      "label": "get"
+    }
+  ],
+
+  "configs":
+  [
+    {
+      "itemId": 1,
+      "name": "restapi.metadata.uri",
+      "type": "string",
+      "mandatory": true,
+      "label": "Metadata REST API endpoint"
+    }
+  ]
+}
