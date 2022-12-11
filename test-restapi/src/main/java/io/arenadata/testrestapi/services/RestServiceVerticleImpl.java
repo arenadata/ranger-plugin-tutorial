@@ -1,6 +1,7 @@
 package io.arenadata.testrestapi.services;
 import io.arenadata.testrestapi.dao.Category;
 import io.arenadata.testrestapi.repositories.CategoryRepositoryImpl;
+import io.arenadata.testrestapi.system.CommonConstants;
 import io.arenadata.testrestapi.system.ManagedException;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.AbstractVerticle;
@@ -18,16 +19,14 @@ import java.util.Map;
 
 public final class RestServiceVerticleImpl extends AbstractVerticle {
     private static final int DEFAULT_HTTP_LISTENER_PORT  = 8080;
-    private static final int DEFAULT_DATA_OFFSET_VALUE   = 0;
-    private static final int DEFAULT_DATA_LIMIT_VALUE    = 10;
     private static final String DEFAULT_TEST_REST_METHOD = "get";
     private static final String DEFAULT_TEST_HTTP_HEADER = "test-ranger-user";
     private static final Map<String, String> REST_MAP    = new HashMap<>();
 
     static {
-        REST_MAP.put("metadata-uri" ,"/api/v1/metadata");
-        REST_MAP.put("data-uri"     ,"/api/v1/data");
-        REST_MAP.put("datetime-uri" ,"/api/v1/datetime");
+        REST_MAP.put(CommonConstants.DEFAULT_METADATA_URI_KEY ,"/api/v1/metadata");
+        REST_MAP.put(CommonConstants.DEFAULT_DATA_URI_KEY     ,"/api/v1/data");
+        REST_MAP.put(CommonConstants.DEFAULT_DATETIME_URI_KEY ,"/api/v1/datetime");
     }
 
     private static final Logger logger = LoggerFactory.getLogger(RestServiceVerticleImpl.class);
@@ -38,9 +37,9 @@ public final class RestServiceVerticleImpl extends AbstractVerticle {
     public void start(Promise<Void> promise) throws ManagedException {
         logger.info("Started to initialize vertx router with HTTP-server...");
         final Router router = Router.router(vertx);
-        router.get(REST_MAP.get("metadata-uri")).handler(this::handleMetadataRequest);
-        router.get(REST_MAP.get("data-uri")).handler(this::getTestData);
-        router.get(REST_MAP.get("datetime-uri")).handler(this::handleDatetimeRequest);
+        router.get(REST_MAP.get(CommonConstants.DEFAULT_METADATA_URI_KEY)).handler(this::handleMetadataRequest);
+        router.get(REST_MAP.get(CommonConstants.DEFAULT_DATA_URI_KEY)).handler(this::getTestData);
+        router.get(REST_MAP.get(CommonConstants.DEFAULT_DATETIME_URI_KEY)).handler(this::handleDatetimeRequest);
 
         vertx.createHttpServer()
         .requestHandler(router)
@@ -110,7 +109,7 @@ public final class RestServiceVerticleImpl extends AbstractVerticle {
     private void handleMetadataRequest(RoutingContext routingContext) {
         logger.info("Started to handle the metadata request...");
         Map<String, String> uriList = new HashMap<>(REST_MAP);
-        uriList.remove("metadata-uri");
+        uriList.remove(CommonConstants.DEFAULT_METADATA_URI_KEY);
         sendSuccessfulResponseWithData(routingContext, uriList);
     }
 
@@ -121,7 +120,9 @@ public final class RestServiceVerticleImpl extends AbstractVerticle {
         if (!isAuthorized)
             sendFailedStateResponse(routingContext, HttpResponseStatus.UNAUTHORIZED.code());
         else {
-            final List<Category> data = repository.getAllWithOffsetAndLimit(DEFAULT_DATA_OFFSET_VALUE, DEFAULT_DATA_LIMIT_VALUE);
+            final List<Category> data = repository.getAllWithOffsetAndLimit(
+                CommonConstants.DEFAULT_DATA_OFFSET_VALUE,
+                CommonConstants.DEFAULT_DATA_LIMIT_VALUE);
 
             if (data == null || data.isEmpty())
                 sendFailedStateResponse(routingContext, HttpResponseStatus.NOT_FOUND.code());

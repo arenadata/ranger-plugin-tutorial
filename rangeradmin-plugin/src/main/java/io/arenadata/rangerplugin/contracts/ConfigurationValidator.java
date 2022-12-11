@@ -4,5 +4,4 @@ import java.util.Map;
 
 public interface ConfigurationValidator {
     Map<String, Object> processServiceConfigs(String serviceName, Map<String, String> configs) throws ManagedException;
-
 }

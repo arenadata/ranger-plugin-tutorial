@@ -1,4 +1,5 @@
 package io.arenadata.testrestapi.dao;
+import io.arenadata.testrestapi.system.CommonConstants;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -23,5 +24,22 @@ public final class Category implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public int hashCode() {
+        return CommonConstants.DEFAULT_ODD_PRIME_VALUE * this.id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object inputObject) {
+        if (this == inputObject)
+            return true;
+
+        if (inputObject == null || getClass() != inputObject.getClass())
+            return false;
+
+        Category inputDao = (Category)inputObject;
+        return this.id.equals(inputDao.id);
     }
 }

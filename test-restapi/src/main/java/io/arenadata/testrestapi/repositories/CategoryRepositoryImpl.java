@@ -16,8 +16,8 @@ import java.security.SecureRandom;
 
 public final class CategoryRepositoryImpl implements DataRepository<Category> {
     private static final String DEFAULT_UNIT_NAME = "test";
-    private static final Logger logger = LoggerFactory.getLogger(CategoryRepositoryImpl.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(CategoryRepositoryImpl.class);
     private final EntityManagerFactory managerFactory;
     private final EntityManager entityManager;
 
