@@ -81,7 +81,7 @@ public final class RestServiceVerticleImpl extends AbstractVerticle {
             REST_MAP.get(resourceValue),
             DEFAULT_TEST_REST_METHOD,
             authorizationTestUser,
-  null
+            null
         );
 
         logger.info("Authorization response result: {}", isAuthorized);

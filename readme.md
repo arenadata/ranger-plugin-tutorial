@@ -6,7 +6,7 @@ This git-repo includes two Java projects, related to:
 
 ### Details
 
-- server-side part is compiled and tested against Apache Ranger v2.0.0 (Arenadata Platform Security, v1.0.2_b7-1)
+- server-side part is compiled and tested against Apache Ranger v2.0.0 (ADPS, v1.0.2_b7-1)
 - REST API uses Vert.x, Hibernate JPA & the H2 embedded database
 - a naive logger is used in the server-side Ranger plugin part, due to the existing bug in Ranger Admin v2.0.0, related to the Apache Tomcat logging process
 
