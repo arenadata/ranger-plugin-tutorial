@@ -120,9 +120,13 @@ public final class RestServiceVerticleImpl extends AbstractVerticle {
         if (!isAuthorized)
             sendFailedStateResponse(routingContext, HttpResponseStatus.UNAUTHORIZED.code());
         else {
-            final List<Category> data = repository.getAllWithOffsetAndLimit(
-                CommonConstants.DEFAULT_DATA_OFFSET_VALUE,
-                CommonConstants.DEFAULT_DATA_LIMIT_VALUE);
+            final HttpServerRequest request = routingContext.request();
+            final String offsetParamValue   = request.getParam(CommonConstants.DEFAULT_QUERY_PARAM_OFFSET_KEY);
+            final String limitParamValue    = request.getParam(CommonConstants.DEFAULT_QUERY_PARAM_LIMIT_KEY);
+            final List<Category> data       = repository.getAllWithOffsetAndLimit(
+                offsetParamValue == null ? CommonConstants.DEFAULT_DATA_OFFSET_VALUE : processIntegerParameter(routingContext, offsetParamValue),
+                limitParamValue  == null ? CommonConstants.DEFAULT_DATA_LIMIT_VALUE  : processIntegerParameter(routingContext, limitParamValue)
+            );
 
             if (data == null || data.isEmpty())
                 sendFailedStateResponse(routingContext, HttpResponseStatus.NOT_FOUND.code());
@@ -139,5 +143,17 @@ public final class RestServiceVerticleImpl extends AbstractVerticle {
             sendFailedStateResponse(routingContext, HttpResponseStatus.UNAUTHORIZED.code());
         else
             sendSuccessfulResponseWithData(routingContext, LocalDateTime.now());
+    }
+
+    private int processIntegerParameter(RoutingContext routingContext, String rawValue) {
+        int parsedValue = CommonConstants.DEFAULT_INT_INVALID_VALUE;
+
+        try {
+            parsedValue = Integer.parseInt(rawValue);
+        } catch (NumberFormatException exception) {
+            sendFailedStateResponse(routingContext, HttpResponseStatus.BAD_REQUEST.code());
+        }
+
+        return parsedValue;
     }
 }

@@ -22,7 +22,7 @@ mvn clean package -U -Dmaven.test.skip=true -Drat.skip=true -X
 curl -vk -u "admin:<ranger-admin-password>" -X POST \
     -H "Accept: application/json" -H "Content-Type: application/json" \
     --data @/sourcedir/servicedef.json \
-   "http://<ranger-admin-host>:<ranger-admin-port>/service/plugins/definitions"
+   "http://<ranger-admin-host>:<ranger-admin-port>/service/plugins/definitions" | jq
 ```
 
 ### Remove servicedef from Ranger
@@ -46,7 +46,7 @@ It's needed to define a new Ranger service for testing our demo plugin.
 ### Metadata query
 
 ```sh
-curl -v --header "test-ranger-user: $testuser" http://<rest-api-host>:<rest-api-port>/api/v1/metadata
+curl -v --header "test-ranger-user: $testuser" "http://<rest-api-host>:<rest-api-port>/api/v1/metadata" | jq
 ```
 
 The metadata REST endpoint is the only endpoint which isn't handled by authorization logic.
@@ -54,9 +54,11 @@ The metadata REST endpoint is the only endpoint which isn't handled by authoriza
 ### Test queries
 
 ```sh
-curl -v --header "test-ranger-user: $testuser" http://<rest-api-host>:<rest-api-port>/api/v1/data
+curl -v --header "test-ranger-user: $testuser" "http://<rest-api-host>:<rest-api-port>/api/v1/datetime" | jq
 
-curl -v --header "test-ranger-user: $testuser" http://<rest-api-host>:<rest-api-port>/api/v1/datetime
+curl -v --header "test-ranger-user: $testuser" "http://<rest-api-host>:<rest-api-port>/api/v1/data" | jq
+
+curl -v --header "test-ranger-user: $testuser" "http://<rest-api-host>:<rest-api-port>/api/v1/data?offset=10&limit=10" | jq
 ```
 
 **$testuser** is a test user, which was imported by usersync service of Apache Ranger and which was defined in the service policy.

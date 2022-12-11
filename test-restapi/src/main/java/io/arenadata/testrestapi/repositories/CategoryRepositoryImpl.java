@@ -1,8 +1,7 @@
 package io.arenadata.testrestapi.repositories;
 import io.arenadata.testrestapi.contracts.DataRepository;
 import io.arenadata.testrestapi.dao.Category;
-import io.arenadata.testrestapi.system.ManagedException;
-import io.arenadata.testrestapi.system.ManagedExceptionType;
+import io.arenadata.testrestapi.system.*;
 import jakarta.persistence.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,8 +48,8 @@ public final class CategoryRepositoryImpl implements DataRepository<Category> {
         final List<Category> data = new ArrayList<>();
         final SecureRandom random = new SecureRandom();
 
-        for (int i = 0; i < 10; i++) {
-            final byte[] bytes = new byte[20];
+        for (int i = 0; i < CommonConstants.DEFAULT_MAX_SEED_VALUE; i++) {
+            final byte[] bytes = new byte[CommonConstants.DEFAULT_MAX_RANDOM_BYTES_AMOUNT];
             random.nextBytes(bytes);
 
             final Category item = new Category();
@@ -66,6 +65,9 @@ public final class CategoryRepositoryImpl implements DataRepository<Category> {
     @Override
     public List<Category> getAllWithOffsetAndLimit(int offset, int limit) {
         final TypedQuery<Category> query = this.entityManager.createQuery("FROM Category", Category.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+
         final List<Category> data = query.getResultList();
 
         for (final Category item : data)
