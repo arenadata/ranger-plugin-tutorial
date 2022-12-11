@@ -3,10 +3,7 @@ import io.arenadata.testrestapi.contracts.DataRepository;
 import io.arenadata.testrestapi.dao.Category;
 import io.arenadata.testrestapi.system.ManagedException;
 import io.arenadata.testrestapi.system.ManagedExceptionType;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.Query;
+import jakarta.persistence.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.math.BigInteger;
@@ -16,14 +13,12 @@ import java.security.SecureRandom;
 
 public final class CategoryRepositoryImpl implements DataRepository<Category> {
     private static final String DEFAULT_UNIT_NAME = "test";
-
     private static final Logger logger = LoggerFactory.getLogger(CategoryRepositoryImpl.class);
-    private final EntityManagerFactory managerFactory;
     private final EntityManager entityManager;
 
     public CategoryRepositoryImpl() {
-        this.managerFactory = Persistence.createEntityManagerFactory(DEFAULT_UNIT_NAME);
-        this.entityManager  = this.managerFactory.createEntityManager();
+        final EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory(DEFAULT_UNIT_NAME);
+        this.entityManager = managerFactory.createEntityManager();
     }
 
     @Override
@@ -70,7 +65,7 @@ public final class CategoryRepositoryImpl implements DataRepository<Category> {
 
     @Override
     public List<Category> getAllWithOffsetAndLimit(int offset, int limit) {
-        final Query query = this.entityManager.createNamedQuery("Category.findAll");
+        final TypedQuery<Category> query = this.entityManager.createQuery("FROM Category", Category.class);
         final List<Category> data = query.getResultList();
 
         for (final Category item : data)
